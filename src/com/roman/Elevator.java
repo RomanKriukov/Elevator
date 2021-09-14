@@ -7,9 +7,13 @@ public class Elevator {
     private final int maxCapacity = 5;
     private int thisStorey;
     private int targetStorey;
-    private List<Passenger> elevatorPassengers = new ArrayList<>(maxCapacity);
+    private List<Passenger> elevatorPassengers;
     private boolean directionIsUp;
     private boolean directionIsDown;
+
+    public Elevator() {
+        this.elevatorPassengers = new ArrayList<>();
+    }
 
     public boolean getDirectionIsUp() {
         return directionIsUp;

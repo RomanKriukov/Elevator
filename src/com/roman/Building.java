@@ -1,5 +1,6 @@
 package com.roman;
 
+import java.sql.PseudoColumnUsage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,17 +20,31 @@ public class Building {
         elevator.setTargetStorey(1);
         elevator.setDirectionIsUp(true);
         elevator.setDirectionIsDown(false);
+        System.out.println(storeys.size());
+        System.out.println(numberOfStoreys);
     }
 
     public void movementElevator(){
         while (true){
+
+            System.out.print(elevator.getDirectionIsUp());
             System.out.print(storeys.get(elevator.getThisStorey() - 1).getNumberStorey() + "  ");
-            System.out.print(elevator.getThisStorey() + "   " + elevator.getElevatorPassengers().size());
+            System.out.print(elevator.getThisStorey() + " | " + storeys.get(elevator.getThisStorey() - 1).getPassengers().size() + "| ");
+
             if(elevator.getElevatorPassengers().size() != 0){
                 unloadingElevator();
             }
-            else if(elevator.getElevatorPassengers().size() == 0){
-                choiseOfDirection();
+            if(elevator.getElevatorPassengers().size() == 0){
+                if(elevator.getThisStorey() == 1){
+                    elevator.setDirectionIsUp(true);
+                    elevator.setDirectionIsDown(false);
+                }
+                else if(elevator.getThisStorey() == storeys.size()){
+                    elevator.setDirectionIsUp(false);
+                    elevator.setDirectionIsDown(true);
+                }else {
+                    choiseOfDirection();
+                }
             }
             if(elevator.getDirectionIsUp()){
                 loadingElevator(elevator.getDirectionIsUp());
@@ -69,40 +84,48 @@ public class Building {
         }
     }
 
-    private void unloadingElevator(){
-        for(int i = 0;i < elevator.getElevatorPassengers().size();i++){
-            if(elevator.getElevatorPassengers().get(i).getTargetStorey() == elevator.getThisStorey()){
-                elevator.getElevatorPassengers().get(i).setThisStorey(elevator.getThisStorey());
-                storeys.get(elevator.getThisStorey() - 1).getPassengers().add(elevator.getElevatorPassengers().get(i));
-                elevator.getElevatorPassengers().remove(i);
+    public void unloadingElevator(){
+        int n = elevator.getThisStorey() - 1;
+        List<Passenger> elevatorP = elevator.getElevatorPassengers();
+        List<Passenger> storeyP = storeys.get(n).getPassengers();
+        for(int i = 0;i < elevatorP.size();i++){
+            if(elevatorP.get(i).getTargetStorey() == elevator.getThisStorey()){
+                storeyP.add(elevatorP.get(i));
+                elevatorP.remove(i);
+                storeyP.get(storeyP.size() - 1).setThisStorey(elevator.getThisStorey());
+                i--;
             }
         }
+        elevator.setElevatorPassengers(elevatorP);
+        storeys.get(n).setPassengers(storeyP);
     }
 
-    private void loadingElevator(boolean direction){
+    public void loadingElevator(boolean direction){
 
-        for(int i = 0;i < storeys.get(elevator.getThisStorey() - 1).getPassengers().size();i++){
-            if(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getIsUp() == direction && elevator.getElevatorPassengers().size() < elevator.getMaxCapacity()){
-                
-                elevator.getElevatorPassengers().add(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i));
+        if(storeys.get(elevator.getThisStorey() - 1).getPassengers() == null){}
+        else {
+            for (int i = 0; i < storeys.get(elevator.getThisStorey() - 1).getPassengers().size(); i++) {
+                if (storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getIsUp() == direction && elevator.getElevatorPassengers().size() < elevator.getMaxCapacity()) {
 
-                if(direction && elevator.getTargetStorey() < storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()){
-                    elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
+                    elevator.getElevatorPassengers().add(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i));
+
+                    if (direction && elevator.getTargetStorey() < storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()) {
+                        elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
+                    } else if (!direction && elevator.getTargetStorey() > storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()) {
+                        elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
+                    }
+
+                    storeys.get(elevator.getThisStorey() - 1).getPassengers().remove(i);
+                    i--;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-                else if(!direction && elevator.getTargetStorey() > storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()){
-                    elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
-                }
-
-                storeys.get(elevator.getThisStorey() - 1).getPassengers().remove(i);
-                i--;
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                System.out.print("  " + elevator.getElevatorPassengers().size());
             }
-            System.out.print("  " + elevator.getElevatorPassengers().size());
         }
     }
 

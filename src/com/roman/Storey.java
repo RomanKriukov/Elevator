@@ -14,6 +14,7 @@ public class Storey {
     private int numberOfPassengers;
 
     public Storey(int numberStorey) {
+        this.passengers = new ArrayList<>();
         this.numberStorey = numberStorey;
         this.numberOfPassengers = (int)(Math.random() * 11);
         if(this.numberOfPassengers > 0){
@@ -23,6 +24,10 @@ public class Storey {
 
     public List<Passenger> getPassengers() {
         return passengers;
+    }
+
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
     }
 
     public int getNumberStorey() {
@@ -38,7 +43,7 @@ public class Storey {
     }
 
     private void createPassengers(){
-        passengers = new ArrayList<>();
+
         for(int i = 0;i < this.numberOfPassengers;i++){
             Main.countPassengers++;
             passengers.add(new Passenger(Main.countPassengers, this.numberStorey));

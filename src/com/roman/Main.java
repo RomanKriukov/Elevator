@@ -28,6 +28,7 @@ public class Main {
 //        }
 
         Building building = new Building();
+        //building.loadingElevator(true);
         building.movementElevator();
 //        List<Storey> storeys = building.getStoreys();
 //        System.out.println();
