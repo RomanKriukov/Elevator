@@ -6,6 +6,7 @@ import java.util.List;
 public class Elevator {
     private final int maxCapacity = 5;
     private int thisStorey;
+    private int firstTargetStorey;
     private int targetStorey;
     private List<Passenger> elevatorPassengers;
     private boolean directionIsUp;
@@ -13,6 +14,18 @@ public class Elevator {
 
     public Elevator() {
         this.elevatorPassengers = new ArrayList<>();
+        this.firstTargetStorey = Building.numberOfStoreys;
+    }
+
+    private void firstDestinationStorey(){
+        for(int i = 0;i < this.elevatorPassengers.size();i++){
+            if(this.directionIsUp && this.elevatorPassengers.get(i).getTargetStorey() < this.firstTargetStorey){
+                this.firstTargetStorey = this.elevatorPassengers.get(i).getTargetStorey();
+            }
+            else if(!this.directionIsUp && this.elevatorPassengers.get(i).getTargetStorey() > this.firstTargetStorey){
+                this.firstTargetStorey = this.elevatorPassengers.get(i).getTargetStorey();
+            }
+        }
     }
 
     public boolean getDirectionIsUp() {
@@ -47,12 +60,21 @@ public class Elevator {
         return targetStorey;
     }
 
+    public int getFirstTargetStorey() {
+        return firstTargetStorey;
+    }
+
+    public void setFirstTargetStorey(int firstTargetStorey) {
+        this.firstTargetStorey = firstTargetStorey;
+    }
+
     public List<Passenger> getElevatorPassengers() {
         return elevatorPassengers;
     }
 
     public void setElevatorPassengers(List<Passenger> elevatorPassengers) {
         this.elevatorPassengers = elevatorPassengers;
+        firstDestinationStorey();
     }
 
     public int getMaxCapacity() {

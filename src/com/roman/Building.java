@@ -1,6 +1,5 @@
 package com.roman;
 
-import java.sql.PseudoColumnUsage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ public class Building {
     static int numberOfStoreys;
     private List<Storey> storeys;
     private Elevator elevator;
+    private int numberThisStorey;
 
     public Building() {
         numberOfStoreys = 5 + (int)(Math.random() * 16);
@@ -20,6 +20,7 @@ public class Building {
         elevator.setTargetStorey(1);
         elevator.setDirectionIsUp(true);
         elevator.setDirectionIsDown(false);
+        numberThisStorey = elevator.getThisStorey() - 1;
         System.out.println(storeys.size());
         System.out.println(numberOfStoreys);
     }
@@ -46,12 +47,13 @@ public class Building {
                     choiseOfDirection();
                 }
             }
-            if(elevator.getDirectionIsUp()){
+            if(storeys.get(numberThisStorey).getPassengers().size() != 0){
                 loadingElevator(elevator.getDirectionIsUp());
+            }
+            if(elevator.getDirectionIsUp()){
                 elevator.setThisStorey(elevator.getThisStorey() + 1);
             }
             else if(!elevator.getDirectionIsUp()){
-                loadingElevator(elevator.getDirectionIsUp());
                 elevator.setThisStorey(elevator.getThisStorey() - 1);
             }
             System.out.println();
@@ -85,9 +87,9 @@ public class Building {
     }
 
     public void unloadingElevator(){
-        int n = elevator.getThisStorey() - 1;
+        numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
-        List<Passenger> storeyP = storeys.get(n).getPassengers();
+        List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
         for(int i = 0;i < elevatorP.size();i++){
             if(elevatorP.get(i).getTargetStorey() == elevator.getThisStorey()){
                 storeyP.add(elevatorP.get(i));
@@ -97,7 +99,14 @@ public class Building {
             }
         }
         elevator.setElevatorPassengers(elevatorP);
-        storeys.get(n).setPassengers(storeyP);
+        storeys.get(numberThisStorey).setPassengers(storeyP);
+    }
+
+    public void loadingElevator2(boolean direction){
+        numberThisStorey = elevator.getThisStorey() - 1;
+        List<Passenger> elevatorP = elevator.getElevatorPassengers();
+        List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
+
     }
 
     public void loadingElevator(boolean direction){

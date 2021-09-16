@@ -22,12 +22,38 @@ public class Storey {
         }
     }
 
+    private void clickButton(){
+        int up = 0;
+        int down = 0;
+        for(int i = 0;i < this.passengers.size();i++){
+            if(this.passengers.get(i).getIsUp()){
+                up++;
+            }
+            else {
+                down++;
+            }
+            if(up > 0){
+                this.buttonUp = true;
+            }
+            else{
+                this.buttonUp = false;
+            }
+            if(down > 0){
+                this.buttonDown = true;
+            }
+            else{
+                this.buttonDown = false;
+            }
+        }
+    }
+
     public List<Passenger> getPassengers() {
         return passengers;
     }
 
     public void setPassengers(List<Passenger> passengers) {
         this.passengers = passengers;
+        clickButton();
     }
 
     public int getNumberStorey() {
@@ -42,11 +68,20 @@ public class Storey {
         this.numberOfPassengers = numberOfPassengers;
     }
 
+    public boolean isButtonUp() {
+        return buttonUp;
+    }
+
+    public boolean isButtonDown() {
+        return buttonDown;
+    }
+
     private void createPassengers(){
 
         for(int i = 0;i < this.numberOfPassengers;i++){
             Main.countPassengers++;
             passengers.add(new Passenger(Main.countPassengers, this.numberStorey));
         }
+        clickButton();
     }
 }
