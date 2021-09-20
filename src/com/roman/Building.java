@@ -21,18 +21,21 @@ public class Building {
         elevator.setDirectionIsUp(true);
         elevator.setDirectionIsDown(false);
         numberThisStorey = elevator.getThisStorey() - 1;
-        System.out.println(storeys.size());
-        System.out.println(numberOfStoreys);
+    }
+
+    private void vue(){
+        
+
+        for(int i = numberOfStoreys;i > 0;i--){
+
+        }
     }
 
     public void movementElevator(){
+        vue();
         while (true){
 
-            System.out.print(elevator.getDirectionIsUp());
-            System.out.print(storeys.get(elevator.getThisStorey() - 1).getNumberStorey() + "  ");
-            System.out.print(elevator.getThisStorey() + " | " + storeys.get(elevator.getThisStorey() - 1).getPassengers().size() + "| ");
-
-            if(elevator.getElevatorPassengers().size() != 0){
+            if(elevator.getElevatorPassengers().size() != 0 && elevator.getThisStorey() == elevator.getFirstTargetStorey()){
                 unloadingElevator();
             }
             if(elevator.getElevatorPassengers().size() == 0){
@@ -47,7 +50,13 @@ public class Building {
                     choiseOfDirection();
                 }
             }
-            if(storeys.get(numberThisStorey).getPassengers().size() != 0){
+            if(elevator.getDirectionIsUp() &&
+                    storeys.get(elevator.getThisStorey() - 1).isButtonUp() == elevator.getDirectionIsUp() &&
+                    elevator.getElevatorPassengers().size() != elevator.getMaxCapacity() ||
+                    elevator.getDirectionIsDown() &&
+                    storeys.get(elevator.getThisStorey() - 1).isButtonDown() == elevator.getDirectionIsDown() &&
+                    elevator.getElevatorPassengers().size() != elevator.getMaxCapacity()){
+
                 loadingElevator(elevator.getDirectionIsUp());
             }
             if(elevator.getDirectionIsUp()){
@@ -56,7 +65,7 @@ public class Building {
             else if(!elevator.getDirectionIsUp()){
                 elevator.setThisStorey(elevator.getThisStorey() - 1);
             }
-            System.out.println();
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -86,7 +95,8 @@ public class Building {
         }
     }
 
-    public void unloadingElevator(){
+    private void unloadingElevator(){
+        int count = 0;
         numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
         List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
@@ -96,49 +106,32 @@ public class Building {
                 elevatorP.remove(i);
                 storeyP.get(storeyP.size() - 1).setThisStorey(elevator.getThisStorey());
                 i--;
+                count++;
             }
         }
         elevator.setElevatorPassengers(elevatorP);
         storeys.get(numberThisStorey).setPassengers(storeyP);
     }
 
-    public void loadingElevator2(boolean direction){
+    private void loadingElevator(boolean direction){
         numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
         List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
-
-    }
-
-    public void loadingElevator(boolean direction){
-
-        if(storeys.get(elevator.getThisStorey() - 1).getPassengers() == null){}
-        else {
-            for (int i = 0; i < storeys.get(elevator.getThisStorey() - 1).getPassengers().size(); i++) {
-                if (storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getIsUp() == direction && elevator.getElevatorPassengers().size() < elevator.getMaxCapacity()) {
-
-                    elevator.getElevatorPassengers().add(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i));
-
-                    if (direction && elevator.getTargetStorey() < storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()) {
-                        elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
-                    } else if (!direction && elevator.getTargetStorey() > storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey()) {
-                        elevator.setTargetStorey(storeys.get(elevator.getThisStorey() - 1).getPassengers().get(i).getTargetStorey());
-                    }
-
-                    storeys.get(elevator.getThisStorey() - 1).getPassengers().remove(i);
-                    i--;
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        int count = 0;
+        while (elevatorP.size() < elevator.getMaxCapacity() && count < storeyP.size()){
+            if(storeyP.get(count).getIsUp() == direction){
+                elevatorP.add(storeyP.get(count));
+                storeyP.remove(count);
+                count--;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                System.out.print("  " + elevator.getElevatorPassengers().size());
             }
+            count++;
         }
-    }
-
-    public List<Storey> getStoreys() {
-        return storeys;
+        elevator.setElevatorPassengers(elevatorP);
+        storeys.get(numberThisStorey).setPassengers(storeyP);
     }
 }

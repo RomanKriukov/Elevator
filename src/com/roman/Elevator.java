@@ -18,11 +18,17 @@ public class Elevator {
     }
 
     private void firstDestinationStorey(){
+        if(this.directionIsUp){
+            this.firstTargetStorey = Building.numberOfStoreys;
+        }
+        else{
+            this.firstTargetStorey = 1;
+        }
         for(int i = 0;i < this.elevatorPassengers.size();i++){
             if(this.directionIsUp && this.elevatorPassengers.get(i).getTargetStorey() < this.firstTargetStorey){
                 this.firstTargetStorey = this.elevatorPassengers.get(i).getTargetStorey();
             }
-            else if(!this.directionIsUp && this.elevatorPassengers.get(i).getTargetStorey() > this.firstTargetStorey){
+            else if(this.directionIsDown && this.elevatorPassengers.get(i).getTargetStorey() > this.firstTargetStorey){
                 this.firstTargetStorey = this.elevatorPassengers.get(i).getTargetStorey();
             }
         }
@@ -56,16 +62,8 @@ public class Elevator {
         this.targetStorey = targetStorey;
     }
 
-    public int getTargetStorey() {
-        return targetStorey;
-    }
-
     public int getFirstTargetStorey() {
         return firstTargetStorey;
-    }
-
-    public void setFirstTargetStorey(int firstTargetStorey) {
-        this.firstTargetStorey = firstTargetStorey;
     }
 
     public List<Passenger> getElevatorPassengers() {

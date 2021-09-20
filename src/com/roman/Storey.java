@@ -32,18 +32,18 @@ public class Storey {
             else {
                 down++;
             }
-            if(up > 0){
-                this.buttonUp = true;
-            }
-            else{
-                this.buttonUp = false;
-            }
-            if(down > 0){
-                this.buttonDown = true;
-            }
-            else{
-                this.buttonDown = false;
-            }
+        }
+        if(up > 0){
+            this.buttonUp = true;
+        }
+        else{
+            this.buttonUp = false;
+        }
+        if(down > 0){
+            this.buttonDown = true;
+        }
+        else{
+            this.buttonDown = false;
         }
     }
 

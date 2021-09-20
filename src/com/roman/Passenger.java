@@ -11,11 +11,8 @@ public class Passenger {
     public Passenger(int id, int thisStorey) {
         this.id = id;
         this.thisStorey = thisStorey;
-
         directionOfTraffic();
     }
-
-
 
     private void directionOfTraffic(){
 
