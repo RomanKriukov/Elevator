@@ -78,4 +78,18 @@ public class Elevator {
     public int getMaxCapacity() {
         return maxCapacity;
     }
+
+    @Override
+    public String toString() {
+        String str = "";
+        str += "|";
+        for(Passenger p : this.elevatorPassengers){
+            str += p.toString();
+        }
+        while (str.length() < 21){
+            str += " ";
+        }
+        str += "|";
+        return str;
+    }
 }

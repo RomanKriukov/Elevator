@@ -84,4 +84,13 @@ public class Storey {
         }
         clickButton();
     }
+
+    @Override
+    public String toString() {
+        String str = " ";
+        if(this.numberStorey < 10){
+            str += " ";
+        }
+        return str + this.numberStorey + "|";
+    }
 }

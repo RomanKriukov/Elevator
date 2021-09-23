@@ -23,18 +23,19 @@ public class Building {
         numberThisStorey = elevator.getThisStorey() - 1;
     }
 
-    private void vue(){
-        
-
-        for(int i = numberOfStoreys;i > 0;i--){
-
+    private void view(){
+        String str = "";
+        for(int i = 0;i < 20;i++){
+            str += "\n";
         }
+        str += toString();
+        System.out.println(str);
     }
 
     public void movementElevator(){
-        vue();
-        while (true){
 
+        while (true){
+            view();
             if(elevator.getElevatorPassengers().size() != 0 && elevator.getThisStorey() == elevator.getFirstTargetStorey()){
                 unloadingElevator();
             }
@@ -67,7 +68,7 @@ public class Building {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,7 +97,6 @@ public class Building {
     }
 
     private void unloadingElevator(){
-        int count = 0;
         numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
         List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
@@ -106,7 +106,12 @@ public class Building {
                 elevatorP.remove(i);
                 storeyP.get(storeyP.size() - 1).setThisStorey(elevator.getThisStorey());
                 i--;
-                count++;
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                view();
             }
         }
         elevator.setElevatorPassengers(elevatorP);
@@ -124,14 +129,44 @@ public class Building {
                 storeyP.remove(count);
                 count--;
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                view();
             }
             count++;
         }
         elevator.setElevatorPassengers(elevatorP);
         storeys.get(numberThisStorey).setPassengers(storeyP);
+    }
+
+    @Override
+    public String toString() {
+        String str = "";
+        for(int i = numberOfStoreys - 1;i >= 0;i--){
+            str += storeys.get(i).toString();
+            if(elevator.getThisStorey() - 1 == i){
+                String direction;
+                if(elevator.getDirectionIsUp()){
+                    direction = "^";
+                }else {
+                    direction = "V";
+                }
+                str += direction;
+                str += elevator.toString();
+                str += direction;
+
+            }
+            else {
+                str += "                        ";
+            }
+            str += "|";
+            for(Passenger p : storeys.get(i).getPassengers()){
+                str += p.toString();
+            }
+            str += "\n";
+        }
+        return str;
     }
 }

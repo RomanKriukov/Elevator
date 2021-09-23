@@ -47,6 +47,18 @@ public class Passenger {
         directionOfTraffic();
     }
 
+    @Override
+    public String toString(){
+        String str = " ";
+        if(this.id < 10){
+            str += "  ";
+        }
+        else if(this.id > 9 && this.id < 100){
+            str += " ";
+        }
+        return str + this.id;
+    }
+
     public boolean getIsUp() {
         return this.isUp;
     }
