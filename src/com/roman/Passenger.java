@@ -11,11 +11,10 @@ public class Passenger {
     public Passenger(int id, int thisStorey) {
         this.id = id;
         this.thisStorey = thisStorey;
-        directionOfTraffic();
+        directionOfTraffic();       // вызов метода выбора этажа назначения для пассажира
     }
 
-    private void directionOfTraffic(){
-
+    private void directionOfTraffic(){  // метод выбора этажа назначения
         do{
             this.targetStorey = 1 + (int)(Math.random() * Building.numberOfStoreys);
         }while (this.thisStorey == this.targetStorey);
@@ -30,16 +29,8 @@ public class Passenger {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
     public int getTargetStorey() {
         return targetStorey;
-    }
-
-    public int getThisStorey() {
-        return thisStorey;
     }
 
     public void setThisStorey(int thisStorey) {
@@ -61,9 +52,5 @@ public class Passenger {
 
     public boolean getIsUp() {
         return this.isUp;
-    }
-
-    public boolean getIsDown(){
-        return this.isDown;
     }
 }

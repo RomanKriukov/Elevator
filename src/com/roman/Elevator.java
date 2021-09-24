@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Elevator {
-    private final int maxCapacity = 5;
-    private int thisStorey;
-    private int firstTargetStorey;
-    private int targetStorey;
-    private List<Passenger> elevatorPassengers;
-    private boolean directionIsUp;
-    private boolean directionIsDown;
+    private final int maxCapacity = 5;          // вместимость лифта
+    private int thisStorey;                     // текущий этаж
+    private int firstTargetStorey;              // первый целевой этаж где лифт высадит первого пассажира
+    private int targetStorey;                   // максимальный целевой этаж где выйдет последний пассажир
+    private List<Passenger> elevatorPassengers; // список пассажиров в лифте
+    private boolean directionIsUp;              // направление движения вверх
+    private boolean directionIsDown;            // и вниз
 
     public Elevator() {
         this.elevatorPassengers = new ArrayList<>();
         this.firstTargetStorey = Building.numberOfStoreys;
     }
 
-    private void firstDestinationStorey(){
+    private void firstDestinationStorey(){      // метод для получения первого целевого этажа
         if(this.directionIsUp){
             this.firstTargetStorey = Building.numberOfStoreys;
         }
@@ -72,7 +72,7 @@ public class Elevator {
 
     public void setElevatorPassengers(List<Passenger> elevatorPassengers) {
         this.elevatorPassengers = elevatorPassengers;
-        firstDestinationStorey();
+        firstDestinationStorey();   // вызов метода для получения первого целевого этажа из обновленного списка пассажиров
     }
 
     public int getMaxCapacity() {
@@ -80,8 +80,8 @@ public class Elevator {
     }
 
     @Override
-    public String toString() {
-        String str = "";
+    public String toString() {      // строковое представление о текущем состоянии лифта и пассажиров в нем
+        String str = "";            // используется для визуальной части
         str += "|";
         for(Passenger p : this.elevatorPassengers){
             str += p.toString();

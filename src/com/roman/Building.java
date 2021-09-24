@@ -1,13 +1,16 @@
+// Экземпляр класса Building производит управление лифтом(класс Elevator)
+// и управляет списком этажей(класс Storey)
+//
 package com.roman;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Building {
-    static int numberOfStoreys;
-    private List<Storey> storeys;
-    private Elevator elevator;
-    private int numberThisStorey;
+    static int numberOfStoreys;     // количество этажей дома, доступно всем обьектам и классам программы
+    private List<Storey> storeys;   // список этажей
+    private Elevator elevator;      // обьект лифт
+    private int numberThisStorey;   // текущий этаж на котором находится лифт
 
     public Building() {
         numberOfStoreys = 5 + (int)(Math.random() * 16);
@@ -23,8 +26,8 @@ public class Building {
         numberThisStorey = elevator.getThisStorey() - 1;
     }
 
-    private void view(){
-        String str = "";
+    private void view(){                // метод для вывода визуальной части программы
+        String str = "";                // собирает строку с помощью переопределенных методов toString()
         for(int i = 0;i < 20;i++){
             str += "\n";
         }
@@ -32,23 +35,22 @@ public class Building {
         System.out.println(str);
     }
 
-    public void movementElevator(){
-
+    public void movementElevator(){     // метод управления движением лифта в доме
         while (true){
             view();
             if(elevator.getElevatorPassengers().size() != 0 && elevator.getThisStorey() == elevator.getFirstTargetStorey()){
-                unloadingElevator();
+                unloadingElevator();    // вызов метода выгрузки пассажиров из лифта
             }
-            if(elevator.getElevatorPassengers().size() == 0){
-                if(elevator.getThisStorey() == 1){
-                    elevator.setDirectionIsUp(true);
+            if(elevator.getElevatorPassengers().size() == 0){       // описание условий
+                if(elevator.getThisStorey() == 1){                  // при которых лифт
+                    elevator.setDirectionIsUp(true);                // может сменить направление
                     elevator.setDirectionIsDown(false);
                 }
                 else if(elevator.getThisStorey() == storeys.size()){
                     elevator.setDirectionIsUp(false);
                     elevator.setDirectionIsDown(true);
                 }else {
-                    choiseOfDirection();
+                    choiseOfDirection();        // вызов метода для выбора направления
                 }
             }
             if(elevator.getDirectionIsUp() &&
@@ -56,18 +58,18 @@ public class Building {
                     elevator.getElevatorPassengers().size() != elevator.getMaxCapacity() ||
                     elevator.getDirectionIsDown() &&
                     storeys.get(elevator.getThisStorey() - 1).isButtonDown() == elevator.getDirectionIsDown() &&
-                    elevator.getElevatorPassengers().size() != elevator.getMaxCapacity()){
-
-                loadingElevator(elevator.getDirectionIsUp());
+                    elevator.getElevatorPassengers().size() != elevator.getMaxCapacity())
+            {
+                loadingElevator(elevator.getDirectionIsUp());       // вызов метода для загруки пассажиров в лифт
             }
             if(elevator.getDirectionIsUp()){
-                elevator.setThisStorey(elevator.getThisStorey() + 1);
+                elevator.setThisStorey(elevator.getThisStorey() + 1);   // инкремент этажа при направлении вверх
             }
             else if(!elevator.getDirectionIsUp()){
-                elevator.setThisStorey(elevator.getThisStorey() - 1);
+                elevator.setThisStorey(elevator.getThisStorey() - 1);   // декремент этажа при направлении вниз
             }
 
-            try {
+            try {                               // приостановка потока, имитация потраченого времени на движение лифта
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -75,7 +77,7 @@ public class Building {
         }
     }
 
-    private void choiseOfDirection(){
+    private void choiseOfDirection(){       // метод выбора направления лифта если с него вышли все пассажиры
         int up = 0;
         int down = 0;
         for(Passenger p : storeys.get(elevator.getThisStorey() - 1).getPassengers()){
@@ -96,7 +98,7 @@ public class Building {
         }
     }
 
-    private void unloadingElevator(){
+    private void unloadingElevator(){       // метод выгрузки пассажиров из лифта
         numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
         List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
@@ -106,19 +108,19 @@ public class Building {
                 elevatorP.remove(i);
                 storeyP.get(storeyP.size() - 1).setThisStorey(elevator.getThisStorey());
                 i--;
-                try {
+                try {                       // пауза, иммитация потраченого времени на выход одного пассажира
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                view();
+                view();     // вызов метода отображения для обновления текущего положения всех обьектов
             }
         }
         elevator.setElevatorPassengers(elevatorP);
         storeys.get(numberThisStorey).setPassengers(storeyP);
     }
 
-    private void loadingElevator(boolean direction){
+    private void loadingElevator(boolean direction){    // метод загруки пассажиров в лифт
         numberThisStorey = elevator.getThisStorey() - 1;
         List<Passenger> elevatorP = elevator.getElevatorPassengers();
         List<Passenger> storeyP = storeys.get(numberThisStorey).getPassengers();
@@ -128,12 +130,12 @@ public class Building {
                 elevatorP.add(storeyP.get(count));
                 storeyP.remove(count);
                 count--;
-                try {
+                try {               // имитация времени на вход одного пассажира
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                view();
+                view();         // вызов метода отображения для обновления текущего положения всех обьектов
             }
             count++;
         }
@@ -142,7 +144,7 @@ public class Building {
     }
 
     @Override
-    public String toString() {
+    public String toString() {      // формирование строки с инфой о всех обьектах находящихся в доме
         String str = "";
         for(int i = numberOfStoreys - 1;i >= 0;i--){
             str += storeys.get(i).toString();
@@ -156,7 +158,6 @@ public class Building {
                 str += direction;
                 str += elevator.toString();
                 str += direction;
-
             }
             else {
                 str += "                        ";

@@ -5,24 +5,25 @@ import java.util.List;
 
 public class Storey {
 
+    static int countPassengers = 0;
     private int numberStorey;
 
-    private boolean buttonUp;               // приоритет направления
-    private boolean buttonDown;             // большинства
+    private boolean buttonUp;               // кнопки вверх и вниз, приоритет направления
+    private boolean buttonDown;             // большинства для выбора направления лифта
 
-    private List<Passenger> passengers;     // Список пассажиров
-    private int numberOfPassengers;
+    private List<Passenger> passengers;     // Список пассажиров на этаже
+    private int numberOfPassengers;         // количество пассажиров
 
     public Storey(int numberStorey) {
         this.passengers = new ArrayList<>();
         this.numberStorey = numberStorey;
-        this.numberOfPassengers = (int)(Math.random() * 11);
+        this.numberOfPassengers = (int)(Math.random() * 11);    // количество создаваемых пассажиров от 0 - 10
         if(this.numberOfPassengers > 0){
-            createPassengers();
+            createPassengers();         // вызов метода создания пассажиров на этаже
         }
     }
 
-    private void clickButton(){
+    private void clickButton(){         // определение количества пассажиров нажавших кнопку вверх или вниз
         int up = 0;
         int down = 0;
         for(int i = 0;i < this.passengers.size();i++){
@@ -56,18 +57,6 @@ public class Storey {
         clickButton();
     }
 
-    public int getNumberStorey() {
-        return numberStorey;
-    }
-
-    public int getNumberOfPassengers() {
-        return numberOfPassengers;
-    }
-
-    public void setNumberOfPassengers(int numberOfPassengers) {
-        this.numberOfPassengers = numberOfPassengers;
-    }
-
     public boolean isButtonUp() {
         return buttonUp;
     }
@@ -76,11 +65,10 @@ public class Storey {
         return buttonDown;
     }
 
-    private void createPassengers(){
-
+    private void createPassengers(){        // заполнение этажа пассажирами
         for(int i = 0;i < this.numberOfPassengers;i++){
-            Main.countPassengers++;
-            passengers.add(new Passenger(Main.countPassengers, this.numberStorey));
+            countPassengers++;
+            passengers.add(new Passenger(countPassengers, this.numberStorey));
         }
         clickButton();
     }
